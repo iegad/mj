@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "../pb";
+
+enum PackageID {
+    PID_INVALID = 0;
+    PID_USER_LOGIN_REQ = 1;
+    PID_USER_LOGIN_RSP = 2;
+    PID_CREATE_TABLE_REQ = 3;
+    PID_CREATE_TABLE_RSP = 4;
+    PID_SEARCH_TABLE_REQ = 5;
+    PID_SEARCH_TABLE_RSP = 6;
+}
+
+message UserInfo {
+    string UserID = 1;
+    double Score  = 2;
+}
+
+message TableInfo {
+    string UserID       = 1;
+    int32  MaxRound     = 2;
+    double BaseScore    = 3;
+    int32  MaxFan       = 4;
+    int32  CurrentRound = 5;
+}
+
+message Package {
+    PackageID PID    = 1;
+    int64 Idempotent = 2;
+    bytes Data       = 3;
+}
+
+message UserLoginReq {
+    string UserID = 1;
+}
+
+message UserLoginRsp {
+    int32    Code     = 1;
+    string   Error    = 2;
+    UserInfo UserInfo = 3;
+}
+
+message CreateTableReq {
+    string UserID    = 1; // 属性用户
+    int32  MaxRound  = 2; // 局数
+    double BaseScore = 3; // 底分
+    int32  MaxFan    = 4; // 最大番
+}
+
+message CreateTableRsp {
+    int32  Code    = 1;
+    string Error   = 2;
+    int32  TableID = 3;
+}
+
+message SearchTableReq {
+    int32 TableID = 1;
+}
+
+message SearchTableRsp {
+    
+}
+
