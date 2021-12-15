@@ -265,6 +265,15 @@
     "btnJoinTable": {
       "__id__": 127
     },
+    "txtMaxRound": {
+      "__id__": 25
+    },
+    "txtBaseScore": {
+      "__id__": 39
+    },
+    "txtMaxFan": {
+      "__id__": 53
+    },
     "_id": "07rcA8uSFI5JPRkw21ROKG"
   },
   {
@@ -631,7 +640,7 @@
     },
     "component": "",
     "_componentId": "c9af6BxBdtBFrP+7b6TLPC9",
-    "handler": "enterGame",
+    "handler": "createTable",
     "customEventData": ""
   },
   {

@@ -1,80 +1,101 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { TableInfo } from "../engine/table_info";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class NewClass extends cc.Component {
-    @property(cc.Node)
-    popCreateTable: cc.Node = null
+  @property(cc.Node)
+  popCreateTable: cc.Node = null
 
-    @property(cc.Node)
-    popJoinTable: cc.Node = null
+  @property(cc.Node)
+  popJoinTable: cc.Node = null
 
-    @property(cc.Node)
-    popUserInfo: cc.Node = null
+  @property(cc.Node)
+  popUserInfo: cc.Node = null
 
-    @property(cc.Button)
-    btnCreateTable: cc.Button = null
+  @property(cc.Button)
+  btnCreateTable: cc.Button = null
 
-    @property(cc.Button)
-    btnJoinTable: cc.Button = null
+  @property(cc.Button)
+  btnJoinTable: cc.Button = null
 
-    // LIFE-CYCLE CALLBACKS:
+  @property(cc.EditBox)
+  txtMaxRound: cc.EditBox = null
 
-    // onLoad () {}
+  @property(cc.EditBox)
+  txtBaseScore: cc.EditBox = null
 
-    start () {
+  @property(cc.EditBox)
+  txtMaxFan: cc.EditBox = null
 
+  showPopCreateTable() {
+    this.popCreateTable.active = true
+    this.btnCreateTable.enabled = false
+    this.btnJoinTable.enabled = false
+  }
+
+  hidePopCreateTable() {
+    this.popCreateTable.active = false
+    this.btnCreateTable.enabled = true
+    this.btnJoinTable.enabled = true
+  }
+
+  showPopJoinTable() {
+    this.popJoinTable.active = true
+    this.btnCreateTable.enabled = false
+    this.btnJoinTable.enabled = false
+  }
+
+  hidePopJoinTable() {
+    this.popJoinTable.active = false
+    this.btnCreateTable.enabled = true
+    this.btnJoinTable.enabled = true
+  }
+
+  showPopUserInfo() {
+    this.popUserInfo.active = true
+    this.btnCreateTable.enabled = false
+    this.btnJoinTable.enabled = false
+  }
+
+  hidePopUserInfo() {
+    this.popUserInfo.active = false
+    this.btnCreateTable.enabled = true
+    this.btnJoinTable.enabled = true
+  }
+
+  backToLogin() {
+    cc.director.loadScene("login")
+  }
+
+  createTable() {
+    let maxFan = Number(this.txtMaxFan.string)
+    let maxRound = Number(this.txtMaxRound.string)
+    let baseScore = Number(this.txtBaseScore.string)
+
+    if (isNaN(maxFan) || maxFan <= 0) {
+      alert("无效的最大番数")
+      return
     }
 
-    // update (dt) {}
-
-    showPopCreateTable() {
-        this.popCreateTable.active = true
-        this.btnCreateTable.enabled = false
-        this.btnJoinTable.enabled = false
+    if (isNaN(maxRound) || maxRound <= 0) {
+      alert("无效的最大局数")
+      return
     }
 
-    hidePopCreateTable() {
-        this.popCreateTable.active = false
-        this.btnCreateTable.enabled = true
-        this.btnJoinTable.enabled = true
+    if (isNaN(baseScore) || baseScore <= 0) {
+      alert("无效的底分")
+      return
     }
 
-    showPopJoinTable() {
-        this.popJoinTable.active = true
-        this.btnCreateTable.enabled = false
-        this.btnJoinTable.enabled = false
-    }
+    TableInfo.instance().BaseScore = baseScore
+    TableInfo.instance().MaxFan = maxFan
+    TableInfo.instance().MaxRound = maxRound
 
-    hidePopJoinTable() {
-        this.popJoinTable.active = false
-        this.btnCreateTable.enabled = true
-        this.btnJoinTable.enabled = true
-    }
+    this.enterGame()
+  }
 
-    showPopUserInfo() {
-        this.popUserInfo.active = true
-        this.btnCreateTable.enabled = false
-        this.btnJoinTable.enabled = false
-    }
-
-    hidePopUserInfo() {
-        this.popUserInfo.active = false
-        this.btnCreateTable.enabled = true
-        this.btnJoinTable.enabled = true
-    }
-
-    backToLogin() {
-        cc.director.loadScene("login")
-    }
-
-    enterGame() {
-        cc.director.loadScene("game")
-    }
+  enterGame() {
+    cc.director.loadScene("game")
+  }
 }

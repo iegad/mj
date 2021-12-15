@@ -5,39 +5,46 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class MJ extends cc.Component {
-    // LIFE-CYCLE CALLBACKS:
+  name: string = ''
+  spriteFrame: string = ''
 
-    clicked: boolean = false
+  @property(cc.Node)
+  public inner: cc.Node = null
 
-    onLoad () {
-        var this_ = this
-        this.node.on('mousedown', (ev) => {
-            if (this_.clicked)
-            this_.node.setPosition(this_.node.position.x, this_.node.position.y - 30)
-            else 
-                this_.node.setPosition(this_.node.position.x, this_.node.position.y + 30)
+  @property([cc.Node])
+  public allCards: cc.Node[] = []
 
-            this_.clicked = !this_.clicked
-        })
-    }
+  onLoad() {
+    this.inner = this.node.getChildByName('inner')
+    var this_ = this
+    cc.resources.load<cc.SpriteAtlas>('textures/MJ/my/Z_my', cc.SpriteAtlas, (err, atlas) => {
+      this_.inner.getComponent(cc.Sprite).spriteFrame = atlas.getSpriteFrame(this_.spriteFrame)
+    })
 
-    start () {
-        let sp = this.getComponent(cc.Sprite)
-        console.log(sp.spriteFrame)
-        cc.resources.load("textures/MJ/my/Z_my", cc.SpriteAtlas, (err, atlas) => {
-            sp.spriteFrame = atlas.getSpriteFrame("M_bamboo_8")
-        })
-    }
+    this.node.on('mousedown', (ev) => {
+      for (let i = 0; i < this_.allCards.length; i++) {
+        let inn = this_.allCards[i].getChildByName('inner')
+        if (inn.position.y > 0)
+          inn.setPosition(inn.position.x, -inn.position.y)
+      }
 
-    setFrame(name: string) {
-        
-    }
+      this_.inner.setPosition(this_.inner.position.x, -this_.inner.position.y)
+    })
+  }
 
-    
+  start() {
 
-    // update (dt) {}
+  }
+
+  setFrame(name: string) {
+
+  }
+
+
+
+  // update (dt) {}
 }
